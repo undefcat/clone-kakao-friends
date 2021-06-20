@@ -15,7 +15,14 @@ class CreateProductsTable extends Migration
     {
         Schema::create('products', function (Blueprint $table) {
             $table->id();
-            $table->timestamps();
+            $table->bigInteger('price')->comment('가격');
+            $table->integer('stock')->default(0)->comment('재고');
+            $table->char('currency', 3)->default('KRW')->comment('기준통화');
+            $table->string('name', 60)->comment('상품명');
+            $table->longText('content')->nullable()->comment('상품설명');
+            $table->dateTime('created_at');
+            $table->dateTime('updated_at');
+            $table->dateTime('deleted_at');
         });
     }
 
