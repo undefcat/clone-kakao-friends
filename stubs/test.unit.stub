@@ -1,0 +1,21 @@
+<?php
+
+namespace {{ namespace }};
+
+use PHPUnit\Framework\TestCase;
+use Mockery as m;
+
+class {{ class }} extends TestCase
+{
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        m::close();
+    }
+
+    public function test_example()
+    {
+        $this->assertTrue(true);
+    }
+}
