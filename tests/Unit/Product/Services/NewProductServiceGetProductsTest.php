@@ -37,6 +37,7 @@ class NewProductServiceGetProductsTest extends TestCase
 
         $mock = m::mock(IProductRepository::class);
         $mock->shouldReceive('getNewProducts')
+            ->once()
             ->andReturn(collect(array_fill(0, $count, null)));
 
         $service = new NewProductService($mock);
