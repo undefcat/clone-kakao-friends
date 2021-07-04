@@ -51,6 +51,8 @@ class ProductService
     }
 
     /**
+     * 상품을 삭제한다.
+     *
      * @param int $id
      * @return bool
      */
