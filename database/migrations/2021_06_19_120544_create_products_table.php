@@ -20,9 +20,9 @@ class CreateProductsTable extends Migration
             $table->char('currency', 3)->default('KRW')->comment('기준통화');
             $table->string('name', 60)->comment('상품명');
             $table->longText('content')->nullable()->comment('상품설명');
-            $table->dateTime('created_at');
-            $table->dateTime('updated_at');
-            $table->dateTime('deleted_at');
+            $table->dateTime('created_at')->nullable();
+            $table->dateTime('updated_at')->nullable();
+            $table->dateTime('deleted_at')->nullable();
         });
     }
 
