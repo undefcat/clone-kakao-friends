@@ -3,7 +3,6 @@
 namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Product;
-use Database\Seeders\ProductSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
@@ -17,8 +16,10 @@ class ProductControllerTest extends TestCase
     {
         parent::setUp();
 
-        // 50개 insert
-        $this->seed(ProductSeeder::class);
+        Product::factory()
+            ->count(50)
+            ->hasFiles(1)
+            ->create();
     }
 
     public function test_new_product_list()
