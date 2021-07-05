@@ -2,15 +2,11 @@
 
 namespace Undefcat\Product\Services;
 
+use App\Models\Product;
 use Throwable;
-use Undefcat\Product\Repositories\IProductRepository;
 
 class ProductService
 {
-    public function __construct(
-        private IProductRepository $repo,
-    ) {}
-
     /**
      * 새로운 상품 목록을 가져온다.
      *
@@ -25,7 +21,19 @@ class ProductService
         }
 
         try {
-            return $this->repo->getNewProducts($count, $page);
+            $paginator = Product::paginate($count);
+
+            $current = $paginator->currentPage();
+
+            return [
+                'items' => $paginator->items(),
+                'paging' => [
+                    'current' => $current,
+                    'next' => $paginator->hasMorePages()
+                        ? $current + 1
+                        : $current
+                ],
+            ];
 
         } catch (Throwable $e) {
             return [];
@@ -41,9 +49,17 @@ class ProductService
     public function saveProduct(array $data): array
     {
         try {
-            $product = $this->repo->insertProduct($data);
+            $product = new Product();
 
-            return $product;
+            $product->price = $data['price'];
+            $product->stock = $data['stock'];
+            $product->currency = $data['currency'];
+            $product->name = $data['name'];
+            $product->content = $data['content'];
+
+            $product->save();
+
+            return $product->toArray();
 
         } catch (Throwable $e) {
             return [];
@@ -59,7 +75,10 @@ class ProductService
     public function deleteProduct(int $id): bool
     {
         try {
-            return $this->repo->deleteProduct($id);
+            $deleteCount = Product::where('id', '=', $id)
+                ->delete();
+
+            return $deleteCount === 1;
 
         } catch (Throwable $e) {
 
