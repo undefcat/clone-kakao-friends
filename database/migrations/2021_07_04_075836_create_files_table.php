@@ -18,7 +18,7 @@ class CreateFilesTable extends Migration
             $table->bigInteger('fileable_id')->unsigned()->nullable();
             $table->string('fileable_type')->nullable();
             $table->bigInteger('size')->unsigned()->comment('파일크기(Octet)');
-            $table->string('tag');
+            $table->string('tag')->default('file');
             $table->string('mime_type', 30);
             $table->string('mime_subtype');
             $table->string('original_name')->comment('원본파일명');
