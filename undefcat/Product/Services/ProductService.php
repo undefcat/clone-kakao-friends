@@ -2,7 +2,10 @@
 
 namespace Undefcat\Product\Services;
 
+use App\Models\File;
 use App\Models\Product;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Throwable;
 
 class ProductService
@@ -58,6 +61,24 @@ class ProductService
             $product->content = $data['content'];
 
             $product->save();
+
+            collect($data['images'])->each(function ($image) use ($product) {
+                /** @var UploadedFile $image */
+
+                $path = Storage::disk('public')->put('products', $image);
+                [$mimeType, $mimeSubtype] = explode('/', $image->getMimeType());
+
+                $file = new File();
+
+                $file->size = $image->getSize();
+                $file->tag = 'image';
+                $file->mime_type = $mimeType;
+                $file->mime_subtype = $mimeSubtype;
+                $file->original_name = $image->getClientOriginalName();
+                $file->path = $path;
+
+                $product->files()->save($file);
+            });
 
             return $product->toArray();
 

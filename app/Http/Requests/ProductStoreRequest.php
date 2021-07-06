@@ -14,10 +14,11 @@ class ProductStoreRequest extends FormRequest
             'currency' => ['nullable', 'size:3'],
             'name' => ['required', 'max:60'],
             'content' => ['nullable'],
+            'images.*' => ['required', 'image'],
         ];
     }
 
-    public function attributes()
+    public function attributes(): array
     {
         return [
             'price' => '가격',
@@ -25,6 +26,7 @@ class ProductStoreRequest extends FormRequest
             'currency' => '기준통화',
             'name' => '상품명',
             'content' => '상품설명',
+            'images' => '상품이미지',
         ];
     }
 }

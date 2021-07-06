@@ -4,6 +4,8 @@ namespace Tests\Feature\Http\Controllers;
 
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
 use Tests\TestCase;
@@ -105,12 +107,21 @@ class ProductControllerTest extends TestCase
 
     public function test_insert_product()
     {
+        $disk = 'public';
+        Storage::fake($disk);
+
+        $images = collect([
+                'cover1.png', 'cover2.png', 'cover3.png',
+            ])
+            ->map(fn ($name) => UploadedFile::fake()->image($name));
+
         $data = [
             'price' => 10000,
             'stock' => 10,
             'currency' => 'KRW',
             'name' => 'TITLE',
             'content' => 'DESCRIPTION',
+            'images' => $images->all(),
         ];
 
         $res = $this->json(
@@ -118,6 +129,9 @@ class ProductControllerTest extends TestCase
         );
 
         $res->assertStatus(201);
+        $images->each(fn ($image) =>
+            Storage::disk($disk)->assertExists("products/{$image->hashName()}")
+        );
     }
 
     public function test_insert_product_empty_data()
