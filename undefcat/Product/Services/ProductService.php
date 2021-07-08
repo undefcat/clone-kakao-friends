@@ -32,7 +32,8 @@ class ProductService
         }
 
         try {
-            $paginator = Product::paginate($count);
+            $paginator = Product::orderBy('created_at', 'DESC')
+                ->paginate($count);
 
             $current = $paginator->currentPage();
 
