@@ -19,8 +19,16 @@ class ProductService
      */
     public function getProductList(int $count, int $page = 1): array
     {
+        $default = [
+            'items' => [],
+            'paging' => [
+                'current' => 1,
+                'next' => 1,
+            ],
+        ];
+
         if ($count <= 0) {
-            return [];
+            return $default;
         }
 
         try {
@@ -39,7 +47,7 @@ class ProductService
             ];
 
         } catch (Throwable $e) {
-            return [];
+            return $default;
         }
     }
 

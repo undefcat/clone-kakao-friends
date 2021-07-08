@@ -5,6 +5,7 @@ namespace Tests\Feature\Http\Controllers;
 use App\Models\Product;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Http\UploadedFile;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Testing\Fluent\AssertableJson;
 use Illuminate\Testing\TestResponse;
@@ -22,6 +23,15 @@ class ProductControllerTest extends TestCase
             ->count(50)
             ->hasFiles(1)
             ->create();
+    }
+
+    public function test_empty_product_list()
+    {
+        DB::table('products')->delete();
+
+        $res = $this->getJson(route('products.new'));
+
+        $this->assertNewProductListStatusAndJsonStructure($res, 1);
     }
 
     public function test_new_product_list()
