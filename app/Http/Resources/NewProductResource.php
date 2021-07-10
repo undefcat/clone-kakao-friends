@@ -21,7 +21,7 @@ class NewProductResource extends JsonResource
             'currency' => $this->currency,
             'name' => $this->name,
             'content' => $this->content,
-            'images' => PublicFileResource::collection($this->files),
+            'image' => new PublicFileResource($this->files->first()),
         ];
     }
 }
