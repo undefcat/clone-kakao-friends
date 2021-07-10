@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProductStoreRequest;
-use App\Http\Resources\ProductResource;
+use App\Http\Resources\NewProductResource;
 use Illuminate\Http\JsonResponse;
 use Throwable;
 use Undefcat\Product\Services\ProductService as Service;
@@ -19,7 +19,7 @@ class ProductController extends Controller
         $data = $service->getProductList(20);
 
         return response()->json([
-            'data' => ProductResource::collection($data['items']),
+            'data' => NewProductResource::collection($data['items']),
             'paging' => $data['paging'],
         ]);
     }
